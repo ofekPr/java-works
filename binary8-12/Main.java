@@ -88,7 +88,7 @@ class Main {
     }
 
     // ex 10
-    public static void printLeaves(BinNode<Integer> b) {
+    public static <T>void printLeaves(BinNode<T> b) {
         if(b != null) {
             printLeaves(b.getLeft());
             printLeaves(b.getRight());
@@ -126,6 +126,105 @@ class Main {
         }
     }
 
+    // ex 13
+    public static void similarToFather(BinNode<Integer> b) {
+        if(b != null && (b.hasLeft() || b.hasRight())) {
+            similarToFather(b.getLeft());
+            similarToFather(b.getRight());
+            if (!b.hasRight() || Math.abs(b.getValue() - b.getRight().getValue()) > Math.abs(b.getValue() - b.getLeft().getValue())) {
+                System.out.println(b.getLeft().getValue());
+            } else {
+                System.out.println(b.getRight().getValue());
+            }
+        }
+    }
+
+    // ex 14
+    public static <T>int countLeaves(BinNode<T> b) {
+        if(b != null) {
+            int count = 0;
+            count += countLeaves(b.getLeft());
+            count += countLeaves(b.getRight());
+            if (!b.hasRight() && !b.hasLeft()) {
+                count += 1;
+            }
+            return count;
+        } else {
+            return 0;
+        }
+    }
+
+    // ex 15
+    public static int countInRange(BinNode<Integer> b, int max, int min) {
+        if(b != null && (b.hasLeft() || b.hasRight())) {
+            int count = 0;
+            count += countInRange(b.getLeft(), max, min);
+            count += countInRange(b.getRight(), max, min);
+            if (b.getValue() > min && b.getValue() < max) {
+                count += 1;
+            }
+            return count;
+        } else {
+            return 0;
+        }
+    }
+
+    // ex 16
+    public static int sumOfFathers(BinNode<Integer> b) {
+        int sum=0;
+        if(b != null){
+            sum+=sumOfFathers(b.getLeft());
+            sum+=sumOfFathers(b.getRight());
+            if(b.hasLeft()&&b.hasRight()){
+                sum+=b.getValue();
+            }
+        }
+        return sum;
+    }
+
+    // ex 17
+    public static <T>int countGrandFathers(BinNode<T> b) {
+        if(b != null && b.hasLeft() && b.hasRight()) {
+            int count = 0;
+            count += countGrandFathers(b.getLeft());
+            count += countGrandFathers(b.getRight());
+            BinNode<T> rightSon = b.getRight();
+            BinNode<T> leftSon = b.getLeft();
+            if ((rightSon.hasRight() || rightSon.hasLeft()) && (leftSon.hasRight() || leftSon.hasLeft())) {
+                count += 1;
+            }
+            return count;
+        } else {
+            return 0;
+        }
+    }
+
+    public static <T>boolean findNum(BinNode<T> b, T val) {
+        if(b != null){
+            if(b.getValue() == val){
+                return true;
+            }
+            if(findNum(b.getLeft(), val)) {
+                return true;
+            }
+            if (findNum(b.getRight(), val)) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    // ex 18
+    public static <T>boolean isContained(BinNode<T> b1, BinNode<T> b2) {
+        if(b2 != null){
+            if(findNum(b1, b2.getValue())){
+                return isContained(b1, b2.getLeft()) && isContained(b1, b2.getRight());
+            }
+            return false;
+        }
+        return true;
+    }
     public static void main(String[] args) {
         BinNode<Integer> t15 = new BinNode<Integer>(15);
         BinNode<Integer> t14 = new BinNode<Integer>(14);
@@ -138,6 +237,7 @@ class Main {
         StringTokenizer str = new StringTokenizer("( ( ( -9 15 -7 ) 1 null ) -3 ( 6 34 -4 ) )");
         BinNode<Integer> t = fromString(str);
         System.out.println(t);
+        printTree(t);
 
         System.out.println("\n\nex8a: print neg");
         printNeg(t);
@@ -167,5 +267,25 @@ class Main {
         System.out.println("\n\nex12: print numbers between 10 and 100");
         System.out.println(countNotTooBig(t));
 
+        System.out.println("\n\nex13: print numbers most similar to father");
+        similarToFather(t);
+
+        System.out.println("\n\nex14: count leaves");
+        System.out.println(countLeaves(t));
+
+        System.out.println("\n\nex15: count in range");
+        System.out.println(countInRange(t, 10, 0));
+
+        System.out.println("\n\nex16: sum of fathers");
+        System.out.println(sumOfFathers(t));
+
+        System.out.println("\n\nex17: count grandfathers");
+        System.out.println(countGrandFathers(t));
+
+        System.out.println("\n\nex18: count grandfathers");
+        StringTokenizer str2 = new StringTokenizer("( -9 15 -7 )");
+        BinNode<Integer> t2 = fromString(str2);
+        System.out.println("New tree: " + t2);
+        System.out.println(isContained(t, t2));
     }
 }
