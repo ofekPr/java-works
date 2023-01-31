@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.Queue;
 
 class Main {
     public static BinNode<Integer> fromString(StringTokenizer tokenizer) {
@@ -18,6 +19,22 @@ class Main {
             return new BinNode<Integer>(left, value, right);
         }
         return new BinNode<Integer>(Integer.valueOf(s));
+    }
+
+
+    /* function to print level order traversal of tree*/
+    public static <T>void printLevelOrder(BinNode<T> b) {
+        int h = b.height(b);
+        int i;
+        for (i = 1; i <= h; i++) {
+            String spaces = "";
+            for (int j = 0; j < b.height(b) - i; j++) {
+                spaces += " ";
+            }
+            System.out.print(spaces);
+            b.printGivenLevel(b, i);
+            System.out.print(System.lineSeparator());
+        }
     }
 
     // ex 8 a
@@ -236,8 +253,7 @@ class Main {
 
         StringTokenizer str = new StringTokenizer("( ( ( -9 15 -7 ) 1 null ) -3 ( 6 34 -4 ) )");
         BinNode<Integer> t = fromString(str);
-        System.out.println(t);
-        printTree(t);
+        printLevelOrder(t);
 
         System.out.println("\n\nex8a: print neg");
         printNeg(t);
@@ -255,8 +271,10 @@ class Main {
         treeChar.getLeft().setLeft(new BinNode<Character>(td, 'e', new BinNode<Character>('f')));
         treeChar.getLeft().setRight(new BinNode<Character>(new BinNode<Character>('g'), 'h', new BinNode<Character>('i')));
         System.out.println("\n\nex9: increase tree characters");
-        System.out.println("Original tree: " + treeChar);
-        System.out.println("Increased tree: " + incCharTree(treeChar));
+        System.out.println("Original tree: ");
+        printLevelOrder(treeChar);
+        System.out.println("Increased tree: ");
+        printLevelOrder(incCharTree(treeChar));
 
         System.out.println("\n\nex10: print leaves");
         printLeaves(t);
@@ -285,7 +303,8 @@ class Main {
         System.out.println("\n\nex18: count grandfathers");
         StringTokenizer str2 = new StringTokenizer("( -9 15 -7 )");
         BinNode<Integer> t2 = fromString(str2);
-        System.out.println("New tree: " + t2);
+        System.out.println("New tree: ");
+        printLevelOrder(t2);
         System.out.println(isContained(t, t2));
     }
 }
