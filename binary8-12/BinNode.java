@@ -59,4 +59,36 @@ public class BinNode<T> {
             return value.toString();
         return "( " + left + " " + value + " " + right + " )";
     }
+
+    int height(BinNode<T> root) {
+        if (root == null)
+            return 0;
+        else {
+            /* compute height of each subtree */
+            int lHeight = height(root.getLeft());
+            int rHeight = height(root.getRight());
+
+            /* use the larger one */
+            if (lHeight > rHeight)
+                return (lHeight + 1);
+            else
+                return (rHeight + 1);
+        }
+    }
+
+    void printGivenLevel(BinNode<T> root, int level) {
+        if (root == null)
+            System.out.print("∅ ");
+        else if (level == 1) {
+            String spaces = "";
+            for (int j = 0; j < root.height(root); j++) {
+                spaces += " ";
+            }
+            System.out.print(root.getValue() + spaces);
+        }
+        else if (level > 1) {
+            printGivenLevel(root.getLeft(), level - 1);
+            printGivenLevel(root.getRight(), level - 1);
+        }
+    }
 }
